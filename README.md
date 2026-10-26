@@ -49,6 +49,10 @@ Por eso, en esta prueba de concepto el límite de seguridad se aplica **a nivel 
 3. **Intentar pedir algo destructivo** (opcional, para mostrar el guardrail): "Reinicia el servicio SQL Server" → el agente explica que esta prueba de concepto bloquea comandos de escritura por diseño.
 4. **Documentar un hallazgo**: pedirle que abra un GitHub Issue con lo que encontró — aparece en el mismo repo del demo original, pero claramente etiquetado `foundry-poc` para no confundirse con el trabajo del SRE Agent.
 
+## Cómo mostrar esto al cliente
+
+Ver `docs/GUIDE.md` — guion exacto con capturas reales de los 3 escenarios de validación (sistema operativo, base de datos, IIS), más el guardrail de seguridad en vivo. Antes de la demo, usar `prompts/LAUNCH-DEMO.md` para dejar todo listo.
+
 ## Despliegue
 
 Ver `docs/DEPLOY.md` para el detalle completo de recursos creados y cómo reproducir este ambiente.

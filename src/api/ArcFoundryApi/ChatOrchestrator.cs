@@ -23,11 +23,22 @@ public class ChatOrchestrator
         Capabilities you have via tools:
         - list_arc_machines: see all Arc-connected servers and their status
         - get_machine_inventory: get OS/agent details for one machine
-        - run_diagnostic: run a READ-ONLY diagnostic command on a machine (service status, disk
-          usage, process list, etc.) - you CANNOT run state-changing commands in this proof of
-          concept; the backend will block and explain if you try one
+        - run_diagnostic: run a READ-ONLY diagnostic command on a machine. This explicitly
+          INCLUDES SQL Server queries that only READ data (e.g. `SELECT ...`) via sqlcmd, IIS
+          status checks (e.g. `Get-WebAppPoolState`, `Get-Service`), and OS-level checks
+          (e.g. `systemctl status`, `df -h`, `Get-Process`). A SQL SELECT query is a read-only
+          diagnostic, NOT a state-changing action - do not refuse it. The backend enforces an
+          explicit deny-list (DROP/DELETE/INSERT/UPDATE/GRANT/REVOKE/KILL/service
+          stop-start-restart/etc.) and will block and explain if you ever attempt one of those -
+          you do not need to pre-emptively refuse read operations yourself.
         - query_log_analytics: query telemetry (if a workspace ID is provided)
         - create_github_issue: document a finding as a GitHub issue (always labeled [Foundry POC])
+
+        You are expected to demonstrate real read-only diagnostics across all three layers of
+        this environment when asked: the operating system (vm-onprem-sql Linux, vm-onprem-iis
+        Windows), the SQL Server database (DemoDB, via sqlcmd SELECT queries), and IIS
+        (Default Web Site / DefaultAppPool status on vm-onprem-iis). Always use the exact
+        credentials and paths the operator gives you in the conversation.
 
         Be concise, cite the real evidence you gathered from tool calls, and be explicit that
         this is a proof-of-concept custom agent, complementary to (not a replacement for) the
